@@ -5,41 +5,47 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using WinVim.BL;
+using WinVim.BL.common.events;
 using WinVim.BL.Windows;
 
 namespace WinWin.BL.Windows {
-    public sealed class MessageBroker : IMessageBroker {
-        private IntPtr KeyboardHook { get; set; } = IntPtr.Zero;
-        private NativeFeatures.HookHandle kbProc;
-        IntPtr KeyboardHookCallback(int code, IntPtr wParam, IntPtr lParam) {
-            if (code >= 0) {
 
-                switch (wParam.ToInt32()) {
-                    case NativeFeatures.WM_KEYDOWN:
-                        Console.WriteLine("KeyDown");
-                        break;
-                }
+    public sealed class MessageBroker : IMessageBroker {
+        private readonly IntPtr kbHook = IntPtr.Zero;
+        private readonly NativeFeatures.HookHandle kbProc;
+        private IntPtr keyboardHookCallback(int code, IntPtr wParam, IntPtr lParam) {
+            if (code < 0) return NativeFeatures.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
+
+            if(wParam.ToInt32() == NativeFeatures.WM_KEYDOWN || wParam.ToInt32() == NativeFeatures.WM_SYSKEYDOWN) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
-                keyboardPressed?.Invoke(KeyboardHook, new NativeFeatures.KeyboardMessageEventArgs(st.vkCode, (NativeFeatures.KeyboardMessage)wParam));
+                keyDown?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
             }
+            else if (wParam.ToInt32() == NativeFeatures.WM_KEYUP || wParam.ToInt32() == NativeFeatures.WM_SYSKEYUP) {
+                var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
+                keyUp?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
+            }
+
             return NativeFeatures.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
         }
 
         public MessageBroker() {
-            kbProc = KeyboardHookCallback;
-            KeyboardHook = NativeFeatures.SetWindowsHookEx(NativeFeatures.WH_KEYBOARD_LL, kbProc, IntPtr.Zero, 0);
-            Console.WriteLine(KeyboardHook);
+            kbProc = keyboardHookCallback;
+            kbHook = NativeFeatures.SetWindowsHookEx(NativeFeatures.WH_KEYBOARD_LL, kbProc, IntPtr.Zero, 0);
         }
 
-        public event EventHandler<NativeFeatures.KeyboardMessageEventArgs>? keyboardPressed;
-
-
-        public void Init() {
-            KeyboardHook = NativeFeatures.SetWindowsHookEx(NativeFeatures.WH_KEYBOARD_LL, KeyboardHookCallback, IntPtr.Zero, 0);
+        public bool ProcessMessages() {
+            if (NativeFeatures.GetMessage(out NativeFeatures.MSG msg, IntPtr.Zero, 0, 0) != 0) {
+                NativeFeatures.TranslateMessage(ref msg);
+                NativeFeatures.DispatchMessage(ref msg);
+                //return true;
+            }
+            return false;
         }
 
+        public event EventHandler<KeyboardPressEventArgs>? keyDown;
+        public event EventHandler<KeyboardPressEventArgs>? keyUp;
         public void Dispose() {
-            NativeFeatures.UnhookWindowsHookEx(KeyboardHook);
+            NativeFeatures.UnhookWindowsHookEx(kbHook);
         }
     }
 }

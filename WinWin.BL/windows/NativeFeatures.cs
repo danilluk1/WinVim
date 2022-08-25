@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace WinVim.BL.Windows {
     public static class NativeFeatures {
-        public static readonly int WH_KEYBOARD_LL = 13;
+        public const int WH_KEYBOARD_LL = 13;
+        public const int WM_SYSKEYDOWN = 0x0104;
         public const int WM_KEYDOWN = 0x0100;
+        public const int WM_SYSKEYUP = 0x0105;
+        public const int WM_KEYUP = 0x0101;
 
         [StructLayout(LayoutKind.Sequential, Pack = 8)]
         public struct MSG {
@@ -32,16 +35,6 @@ namespace WinVim.BL.Windows {
             SysKeyUp = 0x105
         }
 
-        public class KeyboardMessageEventArgs : EventArgs {
-            public int VirtKeyCode { get; private set; }
-            public KeyboardMessage MessageType { get; private set; }
-
-            public KeyboardMessageEventArgs(int vkCode, KeyboardMessage msg) {
-                VirtKeyCode = vkCode;
-                MessageType = msg;
-            }
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         internal struct KeyboardLowLevelHookStruct {
             public int vkCode;
@@ -58,7 +51,7 @@ namespace WinVim.BL.Windows {
         internal static extern IntPtr SetWindowsHookEx(int idHook, HookHandle lpfn, IntPtr hInstance, int threadId);
 
         [DllImport("User32.dll")]
-        internal static extern bool GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+        internal static extern sbyte GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr DispatchMessage([In] ref MSG lpmsg);

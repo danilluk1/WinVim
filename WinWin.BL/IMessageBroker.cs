@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinVim.BL.Windows;
+using WinVim.BL.common.events;
 
 namespace WinVim.BL {
     internal interface IMessageBroker : IDisposable {
-        event EventHandler<NativeFeatures.KeyboardMessageEventArgs> keyboardPressed;
-        void Init();
+        event EventHandler<KeyboardPressEventArgs> keyDown;
+        event EventHandler<KeyboardPressEventArgs> keyUp;
     }
 }
