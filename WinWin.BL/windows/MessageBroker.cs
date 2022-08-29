@@ -33,6 +33,8 @@ namespace WinWin.BL.Windows {
             kbHook = NativeFeatures.SetWindowsHookEx(NativeFeatures.WH_KEYBOARD_LL, kbProc, IntPtr.Zero, 0);
         }
 
+        ~MessageBroker() => Dispose();
+
         public bool ProcessMessages() {
             if (NativeFeatures.GetMessage(out NativeFeatures.MSG msg, IntPtr.Zero, 0, 0) != 0) {
                 NativeFeatures.TranslateMessage(ref msg);
@@ -44,8 +46,10 @@ namespace WinWin.BL.Windows {
 
         public event EventHandler<KeyboardPressEventArgs>? keyDown;
         public event EventHandler<KeyboardPressEventArgs>? keyUp;
+
         public void Dispose() {
             NativeFeatures.UnhookWindowsHookEx(kbHook);
+            GC.SuppressFinalize(this);
         }
     }
 }

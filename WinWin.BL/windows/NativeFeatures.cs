@@ -13,6 +13,38 @@ namespace WinVim.BL.Windows {
         public const int WM_SYSKEYUP = 0x0105;
         public const int WM_KEYUP = 0x0101;
 
+        [Flags]
+        public enum MOUSEEVENTF : uint {
+            MOUSEEVENTF_ABSOLUTE = 0x8000,
+            MOUSEEVENTF_LEFTDOWN = 0x0002,
+            MOUSEEVENTF_LEFTUP = 0x0004,
+            MOUSEEVENTF_MIDDLEDOWN = 0x0020,
+            MOUSEEVENTF_MIDDLEUP = 0x0040,
+            MOUSEEVENTF_MOVE = 0x0001,
+            MOUSEEVENTF_RIGHTDOWN = 0x0008,
+            MOUSEEVENTF_RIGHTUP = 0x0010,
+            MOUSEEVENTF_XDOWN = 0x0080,
+            MOUSEEVENTF_XUP = 0x0100,
+            MOUSEEVENTF_WHEEL = 0x0800,
+            MOUSEEVENTF_HWHEEL = 0x01000,
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct INPUT {
+            Int64 type;
+
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct MOUSEINPUT {
+            internal int dx;
+            internal int dy;
+            internal int mouseData;
+            internal MOUSEEVENTF dwFlags;
+            internal uint time;
+            internal UIntPtr dwExtraInfo;
+        }
+
         [StructLayout(LayoutKind.Sequential, Pack = 8)]
         public struct MSG {
             public IntPtr hwnd;
@@ -24,7 +56,7 @@ namespace WinVim.BL.Windows {
         }
 
         public struct POINT {
-            public Int32 x;
+            public Int32 X;
             public Int32 Y;
         }
 
