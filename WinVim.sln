@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinVim.BL", "WinWin.BL\WinV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinVim", "WinVim\WinVim.csproj", "{01BECB43-74BE-4E99-908F-F4451001C2A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinVim.UI", "WinVim.UI\WinVim.UI.csproj", "{EB5300CD-697B-4B53-B49F-BCFEFA7A7EB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{01BECB43-74BE-4E99-908F-F4451001C2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01BECB43-74BE-4E99-908F-F4451001C2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01BECB43-74BE-4E99-908F-F4451001C2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB5300CD-697B-4B53-B49F-BCFEFA7A7EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB5300CD-697B-4B53-B49F-BCFEFA7A7EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB5300CD-697B-4B53-B49F-BCFEFA7A7EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB5300CD-697B-4B53-B49F-BCFEFA7A7EB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,6 +19,7 @@ namespace WinWin.BL.Windows {
             if(wParam.ToInt32() == NativeFeatures.WM_KEYDOWN || wParam.ToInt32() == NativeFeatures.WM_SYSKEYDOWN) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
                 keyDown?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
+                Console.WriteLine(st.vkCode);
             }
             else if (wParam.ToInt32() == NativeFeatures.WM_KEYUP || wParam.ToInt32() == NativeFeatures.WM_SYSKEYUP) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);

@@ -29,20 +29,45 @@ namespace WinVim.BL.Windows {
             MOUSEEVENTF_HWHEEL = 0x01000,
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        struct INPUT {
-            Int64 type;
+        [StructLayout(LayoutKind.Explicit)]
+        public struct INPUT {
+            [FieldOffset(0)]
+            public int type;
 
+            [FieldOffset(4)]
+            public MOUSEINPUT mi;
+
+            [FieldOffset(4)]
+            public KEYBDINPUT ki;
+
+            [FieldOffset(4)]
+            public HARDWAREINPUT hi;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct MOUSEINPUT {
-            internal int dx;
-            internal int dy;
-            internal int mouseData;
-            internal MOUSEEVENTF dwFlags;
-            internal uint time;
-            internal UIntPtr dwExtraInfo;
+        public struct MOUSEINPUT {
+            public int dx;
+            public int dy;
+            public int mouseData;
+            public MOUSEEVENTF dwFlags;
+            public uint time;
+            public UIntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct KEYBDINPUT {
+            public ushort wVk;
+            public ushort wScan;
+            public uint dwFlags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct HARDWAREINPUT {
+            uint uMsg;
+            ushort wParamL;
+            ushort wParamH;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 8)]

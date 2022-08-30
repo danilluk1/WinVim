@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="WinVim.UI/App.axaml" value="WinVim.UI/WinVim.UI.csproj" />
+        <entry key="WinVim.UI/Icons.axaml" value="WinVim.UI/WinVim.UI.csproj" />
+        <entry key="WinVim.UI/MainWindow.axaml" value="WinVim.UI/WinVim.UI.csproj" />
+        <entry key="WinVim.UI/icons.axaml" value="WinVim.UI/WinVim.UI.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

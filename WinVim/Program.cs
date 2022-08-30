@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using WinVim.BL;
 using WinVim.BL.common.events;
+using WinVim.BL.Windows;
 using WinWin.BL.Windows;
 
 public class Program {
@@ -14,7 +15,11 @@ public class Program {
     private static extern bool GetCursorPos([In] ref WinVim.BL.Windows.NativeFeatures.POINT point);
 
     [DllImport("user32.dll", SetLastError = true)]
-    static extern uint SendInput(uint nInputs, ref INPUT pInputs, int cbSize);
+    private static extern uint SendInput(uint nInputs, NativeFeatures.INPUT[] pInputs, int cbSize);
+    
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetMessageExtraInfo();
+    
     public static void Main(string[] args) {
         MessageBroker mb = new();
         MessageHandler mh = new();
@@ -25,6 +30,8 @@ public class Program {
         mh.MouseUp += Mh_MouseUp;
         mh.MouseLeft += Mh_MouseLeft;
         mh.MouseRight += Mh_MouseRight;
+        mh.MouseLeftClick += Mh_MouseLeftClick;
+        mh.MouseRightClick += Mh_MouseRightClick;
 
         mb.keyDown += mh.KeyDown;
         mb.keyUp += mh.KeyUp;
@@ -32,6 +39,22 @@ public class Program {
         mb.ProcessMessages();
     }
 
+    private static void Mh_MouseRightClick() {
+
+    }
+
+    private static void Mh_MouseLeftClick() {
+        Console.WriteLine("Left Click");
+        NativeFeatures.INPUT[] inputs = new NativeFeatures.INPUT[1];
+        inputs[0].type = 0;
+        inputs[0].mi.dwFlags = NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN|NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_ABSOLUTE;
+        inputs[0].mi.dx = point.X;
+        inputs[0].mi.dy = point.Y;
+        inputs[0].mi.mouseData = 0;
+        SendInput(1, inputs, Marshal.SizeOf(inputs));
+        inputs[0].mi.dwFlags =  NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_LEFTUP|NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_ABSOLUTE;
+        SendInput(1, inputs, Marshal.SizeOf(inputs));
+    }
     private static void Mh_MouseRight() {
             GetCursorPos(ref point);
             SetCursorPos(point.X + 5, point.Y);

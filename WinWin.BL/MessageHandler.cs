@@ -28,6 +28,8 @@ namespace WinVim.BL {
         public event Action? MouseDown;
         public event Action? MouseUp;
         public event Action? MouseRight;
+        public event Action? MouseLeftClick;
+        public event Action? MouseRightClick;
 
         public MessageHandler() {
             combinations.Add(new Combination(ctrlAlt, ctrlAltPressed));
@@ -38,6 +40,7 @@ namespace WinVim.BL {
         }
 
 
+        
         private void switchKey(int key) {
             switch (key) {
                 case (int)Keys.ESC:
@@ -55,6 +58,12 @@ namespace WinVim.BL {
                     break;
                 case (int)Keys.L:
                     MouseRight?.Invoke();
+                    break;
+                case (int)Keys.B:
+                    MouseLeftClick?.Invoke();
+                    break;
+                case (int)Keys.N:
+                    MouseRightClick?.Invoke();
                     break;
             }
         }

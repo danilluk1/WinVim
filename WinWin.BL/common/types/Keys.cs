@@ -16,5 +16,7 @@ namespace WinVim.BL.common.types {
         J = 74,
         K = 75,
         L = 76,
+        B = 66, //Left click
+        N = 78, //Right click
     }
 }
