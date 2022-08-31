@@ -38,22 +38,55 @@ public class Program {
 
         mb.ProcessMessages();
     }
+    enum SystemMetric {
+        SM_CXSCREEN = 0,
+        SM_CYSCREEN = 1,
+    }
+
+
+    [DllImport("user32.dll")]
+    static extern int GetSystemMetrics(SystemMetric smIndex);
+
+    static int CalculateAbsoluteCoordinateX(int x) {
+        return (x * 65536) / GetSystemMetrics(SystemMetric.SM_CXSCREEN);
+    }
+
+    static int CalculateAbsoluteCoordinateY(int y) {
+        return (y * 65536) / GetSystemMetrics(SystemMetric.SM_CYSCREEN);
+    }
 
     private static void Mh_MouseRightClick() {
 
     }
 
     private static void Mh_MouseLeftClick() {
+        GetCursorPos(ref point);
         Console.WriteLine("Left Click");
-        NativeFeatures.INPUT[] inputs = new NativeFeatures.INPUT[1];
-        inputs[0].type = 0;
-        inputs[0].mi.dwFlags = NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN|NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_ABSOLUTE;
-        inputs[0].mi.dx = point.X;
-        inputs[0].mi.dy = point.Y;
-        inputs[0].mi.mouseData = 0;
-        SendInput(1, inputs, Marshal.SizeOf(inputs));
-        inputs[0].mi.dwFlags =  NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_LEFTUP|NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_ABSOLUTE;
-        SendInput(1, inputs, Marshal.SizeOf(inputs));
+        NativeFeatures.INPUT[] inputs = new NativeFeatures.INPUT[] {
+            new NativeFeatures.INPUT {
+                type = 0,
+                u = new NativeFeatures.InputUnion {
+                    mi = new NativeFeatures.MOUSEINPUT {
+                        mouseData = 0,
+                        time = 0,
+                        dwFlags = NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN,
+                        dwExtraInfo = GetMessageExtraInfo()
+                    }
+                }
+            },
+            new NativeFeatures.INPUT {
+                type = 0,
+                u = new NativeFeatures.InputUnion {
+                    mi = new NativeFeatures.MOUSEINPUT {
+                        mouseData = 0,
+                        time = 0,
+                        dwFlags = NativeFeatures.MOUSEEVENTF.MOUSEEVENTF_LEFTUP,
+                        dwExtraInfo = GetMessageExtraInfo()
+                    }
+                }
+            }
+        };
+        SendInput(2, inputs, Marshal.SizeOf(typeof(NativeFeatures.INPUT)));
     }
     private static void Mh_MouseRight() {
             GetCursorPos(ref point);

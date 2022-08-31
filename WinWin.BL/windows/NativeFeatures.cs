@@ -29,19 +29,16 @@ namespace WinVim.BL.Windows {
             MOUSEEVENTF_HWHEEL = 0x01000,
         }
 
-        [StructLayout(LayoutKind.Explicit)]
         public struct INPUT {
-            [FieldOffset(0)]
             public int type;
+            public InputUnion u;
+        }
 
-            [FieldOffset(4)]
-            public MOUSEINPUT mi;
-
-            [FieldOffset(4)]
-            public KEYBDINPUT ki;
-
-            [FieldOffset(4)]
-            public HARDWAREINPUT hi;
+        [StructLayout(LayoutKind.Explicit)]
+        public struct InputUnion {
+            [FieldOffset(0)] public MOUSEINPUT mi;
+            [FieldOffset(0)] public KEYBDINPUT ki;
+            [FieldOffset(0)] public HARDWAREINPUT hi;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -51,7 +48,7 @@ namespace WinVim.BL.Windows {
             public int mouseData;
             public MOUSEEVENTF dwFlags;
             public uint time;
-            public UIntPtr dwExtraInfo;
+            public IntPtr dwExtraInfo;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -121,5 +118,17 @@ namespace WinVim.BL.Windows {
 
         [DllImport("user32.dll")]
         internal static extern int UnhookWindowsHookEx(IntPtr hHook);
+
+        [DllImport("user32.dll")]
+        private static extern bool SetCursorPos(int x, int y);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetCursorPos([In] ref POINT point);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetMessageExtraInfo();
     }
 }
