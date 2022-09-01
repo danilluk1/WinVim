@@ -107,6 +107,9 @@ namespace WinVim.BL.Windows {
         [DllImport("User32.dll")]
         internal static extern sbyte GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
+        [DllImport("User32.dll")]
+        internal static extern bool PeekMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
+
         [DllImport("user32.dll")]
         internal static extern IntPtr DispatchMessage([In] ref MSG lpmsg);
 
@@ -120,15 +123,19 @@ namespace WinVim.BL.Windows {
         internal static extern int UnhookWindowsHookEx(IntPtr hHook);
 
         [DllImport("user32.dll")]
-        private static extern bool SetCursorPos(int x, int y);
+        public static extern bool SetCursorPos(int x, int y);
 
         [DllImport("user32.dll")]
-        private static extern bool GetCursorPos([In] ref POINT point);
+        public static extern bool GetCursorPos([In] ref POINT point);
 
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+        public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
         [DllImport("user32.dll")]
-        private static extern IntPtr GetMessageExtraInfo();
+        public static extern IntPtr GetMessageExtraInfo();
+
+        [DllImport("user32.dll", EntryPoint = "BlockInput")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool BlockInput([MarshalAs(UnmanagedType.Bool)] bool fBlockIt);
     }
 }

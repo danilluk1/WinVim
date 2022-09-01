@@ -7,15 +7,6 @@ using WinVim.BL.common.events;
 using WinVim.BL.common.types;
 
 namespace WinVim.BL {
-    public class Combination {
-        public int[] Combo { get; private set; }
-        public Action Action { get; private set; }
-
-        public Combination(int[] combo, Action action) {
-            Combo = combo;
-            Action = action;
-        }
-    }
 
     public class MessageHandler {
         private readonly Stack<int> pressedKeys = new();

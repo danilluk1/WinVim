@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using WinVim.BL;
 using WinVim.BL.common.events;
 using WinVim.BL.Windows;
@@ -15,7 +10,7 @@ namespace WinWin.BL.Windows {
         private readonly NativeFeatures.HookHandle kbProc;
         private IntPtr keyboardHookCallback(int code, IntPtr wParam, IntPtr lParam) {
             if (code < 0) return NativeFeatures.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
-
+            NativeFeatures.PeekMessage(out NativeFeatures.MSG msg, IntPtr.Zero, 0, 0, 1);
             if(wParam.ToInt32() == NativeFeatures.WM_KEYDOWN || wParam.ToInt32() == NativeFeatures.WM_SYSKEYDOWN) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
                 keyDown?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
@@ -26,21 +21,20 @@ namespace WinWin.BL.Windows {
                 keyUp?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
             }
 
-            return NativeFeatures.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
+            return NativeFeatures.CallNextHookEx(IntPtr.Zero, 0, wParam, lParam);
         }
-
         public MessageBroker() {
             kbProc = keyboardHookCallback;
             kbHook = NativeFeatures.SetWindowsHookEx(NativeFeatures.WH_KEYBOARD_LL, kbProc, IntPtr.Zero, 0);
         }
 
         ~MessageBroker() => Dispose();
-
-        public bool ProcessMessages() {
-            if (NativeFeatures.GetMessage(out NativeFeatures.MSG msg, IntPtr.Zero, 0, 0) != 0) {
-                NativeFeatures.TranslateMessage(ref msg);
-                NativeFeatures.DispatchMessage(ref msg);
-                //return true;
+        public bool ProcessMessages(bool isInVimMode = true) {
+            NativeFeatures.MSG msg;
+   
+            while (NativeFeatures.GetMessage(out msg, IntPtr.Zero, 0, 0) != 0) {
+                //NativeFeatures.TranslateMessage(ref msg);
+                //NativeFeatures.DispatchMessage(ref msg);
             }
             return false;
         }
