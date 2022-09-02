@@ -9,9 +9,11 @@ namespace WinVim.BL {
         private static Settings? settings;
         public int SpeedX { get; set; }
         public int SpeedY { get; set; }
-        public Combination ToVimModeCombo { get; set; }
-        public Combination 
-        private Settings() { }
+        public Combination? ToVimModeCombo { get; set; }
+        public List<Control> Controls { get; set; }
+
+        private Settings() { 
+        }
 
         public static Settings GetInstance() {
             if (settings == null)

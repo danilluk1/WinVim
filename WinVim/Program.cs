@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using WinVim.BL;
 using WinVim.BL.common.events;
+using WinVim.BL.common.types;
 using WinVim.BL.windows;
 using WinVim.BL.Windows;
 using WinWin.BL.Windows;
@@ -20,28 +21,6 @@ public class Program {
     
     [DllImport("user32.dll")]
     private static extern IntPtr GetMessageExtraInfo();
-    
-    public static void Main(string[] args) {
-        MessageBroker mb = new();
-        MessageHandler mh = new();
-        mh.VimModeEnabled += Mh_VimModeEnabled;
-        mh.VimModeDisabled += Mh_VimModeDisabled;
-
-        mh.MouseDown += Mh_MouseDown;
-        mh.MouseUp += Mh_MouseUp;
-        mh.MouseLeft += Mh_MouseLeft;
-        mh.MouseRight += Mh_MouseRight;
-        mh.MouseLeftClick += Mh_MouseLeftClick;
-        mh.MouseRightClick += Mh_MouseRightClick;
-
-        mb.keyDown += mh.KeyDown;
-        mb.keyUp += mh.KeyUp;
-
-        while (true) {
-            mb.ProcessMessages();
-        }
-    }
-
 
     private static void Mh_MouseRightClick() {
         Console.WriteLine("Left Click");
@@ -74,7 +53,7 @@ public class Program {
         Console.WriteLine(point.X + " " + point.Y);
         Console.WriteLine("Up");
     }
-    
+
     private static void Mh_MouseDown() {
         GetCursorPos(ref point);
         SetCursorPos(point.X, point.Y + 5);
@@ -92,5 +71,44 @@ public class Program {
         NativeFeatures.BlockInput(true);
         GetCursorPos(ref point);
         Console.WriteLine("Enabled");
+    }
+
+    public static void Main(string[] args) {
+        Settings settings = Settings.GetInstance();
+        settings.SpeedX = 5;
+        settings.SpeedY = 5;
+        settings.Controls = new List<Control> {
+            new Control(Direction.GetDirection(Directions.TopLeft), Keys.Empty),
+            new Control(Direction.GetDirection(Directions.Top), Keys.K),
+            new Control(Direction.GetDirection(Directions.TopRight), Keys.Empty),
+            new Control(Direction.GetDirection(Directions.Right), Keys.L),
+            new Control(Direction.GetDirection(Directions.BottomRight), Keys.Empty),
+            new Control(Direction.GetDirection(Directions.Bottom), Keys.J),
+            new Control(Direction.GetDirection(Directions.BottomLeft), Keys.Empty),
+            new Control(Direction.GetDirection(Directions.Left), Keys.H),
+        };
+        var arr = new Keys[] {Keys.LeftShift, Keys.Tab};
+        settings.ToVimModeCombo = new Combination(
+            arr,
+            Mh_VimModeEnabled
+        );
+        MessageBroker mb = new();
+        MessageHandler mh = new();
+        mh.VimModeEnabled += Mh_VimModeEnabled;
+        mh.VimModeDisabled += Mh_VimModeDisabled;
+
+        mh.MouseDown += Mh_MouseDown;
+        mh.MouseUp += Mh_MouseUp;
+        mh.MouseLeft += Mh_MouseLeft;
+        mh.MouseRight += Mh_MouseRight;
+        mh.MouseLeftClick += Mh_MouseLeftClick;
+        mh.MouseRightClick += Mh_MouseRightClick;
+
+        mb.keyDown += mh.KeyDown;
+        mb.keyUp += mh.KeyUp;
+
+        while (true) {
+            mb.ProcessMessages();
+        }
     }
 }

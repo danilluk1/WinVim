@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinVim.BL.common.types;
+﻿using WinVim.BL.common.types;
 
 namespace WinVim.BL {
-    internal class Control {
-        public Keys 
-        public Control(Keys left, Keys down, Keys up, Keys right) {
+    public class Control {
+        public Direction Direction { get; set; }
+        public Keys Key { get; set; }
 
+        public Control(Direction direction, Keys key) {
+            Direction = direction;
+            Key = key;
         }
     }
 }

@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WinVim.BL {
-    internal static class Controls {
-        public static 
+    public sealed class Controls {
+        public Control[] ControlsArr { get; set; }
+        public Controls(Control[] controls) {
+            this.ControlsArr = controls;
+        }
     }
 }

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinVim.BL.common.events;
+﻿using WinVim.BL.common.events;
 using WinVim.BL.common.types;
 
 namespace WinVim.BL {
 
     public class MessageHandler {
-        private readonly Stack<int> pressedKeys = new();
-        private readonly int[] ctrlAlt = { 162, 164 };
+        private readonly Stack<Keys> pressedKeys = new();
+        private readonly Keys[] ctrlAlt = { Keys.LeftMenu, Keys.LeftShift };
 
         private readonly List<Combination> combinations = new();
         public event Action? VimModeEnabled;
@@ -32,34 +27,34 @@ namespace WinVim.BL {
 
 
         
-        private void switchKey(int key) {
+        private void switchKey(Keys key) {
             switch (key) {
-                case (int)Keys.ESC:
+                case Keys.Escape:
                     Console.WriteLine("Esc");
                     VimModeDisabled?.Invoke();
                 break;
-                case (int)Keys.H:
+                case Keys.H:
                     MouseLeft?.Invoke();
                     break;
-                case (int)Keys.J:
+                case Keys.J:
                     MouseDown?.Invoke();
                     break;
-                case (int)Keys.K:
+                case Keys.K:
                     MouseUp?.Invoke();
                     break;
-                case (int)Keys.L:
+                case Keys.L:
                     MouseRight?.Invoke();
                     break;
-                case (int)Keys.B:
+                case Keys.B:
                     MouseLeftClick?.Invoke();
                     break;
-                case (int)Keys.N:
+                case Keys.N:
                     MouseRightClick?.Invoke();
                     break;
             }
         }
 
-        private void switchCombination(int[] pressed) {
+        private void switchCombination(Keys[] pressed) {
             foreach (Combination combo in combinations) {
                 Array.Sort(pressed);
                 if(Enumerable.SequenceEqual(pressed, combo.Combo)) {
@@ -69,7 +64,7 @@ namespace WinVim.BL {
         }
 
         public void KeyDown(object? sender, KeyboardPressEventArgs e) {
-            pressedKeys.Push(e.VirtKeyCode);
+            pressedKeys.Push((Keys)e.VirtKeyCode);
             var pressed = pressedKeys.ToArray();
             switchKey(pressedKeys.Peek());
             if (pressed.Length > 1) {
