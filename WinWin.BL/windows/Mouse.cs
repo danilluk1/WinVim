@@ -1,8 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using WinVim.BL.Windows;
+﻿using System.Runtime.InteropServices;
 
-namespace WinVim.BL.windows {
+namespace WinVim.BL.Windows {
     public static class Mouse {
         public static void MouseLeftClick() {
             NativeFeatures.INPUT[] inputs = new NativeFeatures.INPUT[] {

@@ -1,9 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using WinVim.BL;
-using WinVim.BL.common.events;
-using WinVim.BL.Windows;
+using WinVim.BL.Common.Events;
 
-namespace WinWin.BL.Windows {
+namespace WinVim.BL.Windows {
 
     public sealed class MessageBroker : IMessageBroker {
         private readonly IntPtr kbHook = IntPtr.Zero;
@@ -13,12 +11,12 @@ namespace WinWin.BL.Windows {
             NativeFeatures.PeekMessage(out NativeFeatures.MSG msg, IntPtr.Zero, 0, 0, 1);
             if(wParam.ToInt32() == NativeFeatures.WM_KEYDOWN || wParam.ToInt32() == NativeFeatures.WM_SYSKEYDOWN) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
-                keyDown?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
+                KeyDown?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
                 Console.WriteLine(st.vkCode);
             }
             else if (wParam.ToInt32() == NativeFeatures.WM_KEYUP || wParam.ToInt32() == NativeFeatures.WM_SYSKEYUP) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
-                keyUp?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
+                KeyUp?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
             }
 
             return NativeFeatures.CallNextHookEx(IntPtr.Zero, 0, wParam, lParam);
@@ -39,8 +37,8 @@ namespace WinWin.BL.Windows {
             return false;
         }
 
-        public event EventHandler<KeyboardPressEventArgs>? keyDown;
-        public event EventHandler<KeyboardPressEventArgs>? keyUp;
+        public event EventHandler<KeyboardPressEventArgs>? KeyDown;
+        public event EventHandler<KeyboardPressEventArgs>? KeyUp;
 
         public void Dispose() {
             NativeFeatures.UnhookWindowsHookEx(kbHook);

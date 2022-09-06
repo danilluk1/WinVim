@@ -1,4 +1,4 @@
-﻿using WinVim.BL.common.types;
+﻿using WinVim.BL.Common.Types;
 
 namespace WinVim.BL {
     public class Control {

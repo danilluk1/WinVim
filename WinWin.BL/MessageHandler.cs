@@ -1,74 +1,56 @@
-﻿using WinVim.BL.common.events;
-using WinVim.BL.common.types;
+﻿using WinVim.BL.Common.Events;
+using WinVim.BL.Common.Types;
 
 namespace WinVim.BL {
 
     public class MessageHandler {
+        private readonly Settings settings;
         private readonly Stack<Keys> pressedKeys = new();
-        private readonly Keys[] ctrlAlt = { Keys.LeftMenu, Keys.LeftShift };
 
-        private readonly List<Combination> combinations = new();
         public event Action? VimModeEnabled;
         public event Action? VimModeDisabled;
-        public event Action? MouseLeft;
-        public event Action? MouseDown;
-        public event Action? MouseUp;
-        public event Action? MouseRight;
         public event Action? MouseLeftClick;
         public event Action? MouseRightClick;
-
-        public MessageHandler() {
-            combinations.Add(new Combination(ctrlAlt, ctrlAltPressed));
+        public event Action<Direction>? MouseMove;
+        public MessageHandler(Settings settings) {
+            this.settings = settings;
         }
-        private void ctrlAltPressed() {
-            VimModeEnabled?.Invoke();
-            Console.WriteLine("Ctrl + Alt");
-        }
-
 
         
-        private void switchKey(Keys key) {
-            switch (key) {
-                case Keys.Escape:
-                    Console.WriteLine("Esc");
-                    VimModeDisabled?.Invoke();
-                break;
-                case Keys.H:
-                    MouseLeft?.Invoke();
-                    break;
-                case Keys.J:
-                    MouseDown?.Invoke();
-                    break;
-                case Keys.K:
-                    MouseUp?.Invoke();
-                    break;
-                case Keys.L:
-                    MouseRight?.Invoke();
-                    break;
-                case Keys.B:
-                    MouseLeftClick?.Invoke();
-                    break;
-                case Keys.N:
-                    MouseRightClick?.Invoke();
-                    break;
+        private void SwitchKey(Keys key) {
+            if (!settings.IsInVim) return;
+
+            var control = settings.Controls.FirstOrDefault((control) => control.Key == key);
+            if (control == null) return;
+
+            if(control.Key == settings.MouseLeft) {
+                MouseLeftClick?.Invoke();
+                return;
             }
+            else if(control.Key == settings.MouseRight) {
+                MouseRightClick?.Invoke();
+                return;
+            }
+
+            MouseMove?.Invoke(control.Direction);
         }
 
-        private void switchCombination(Keys[] pressed) {
-            foreach (Combination combo in combinations) {
-                Array.Sort(pressed);
-                if(Enumerable.SequenceEqual(pressed, combo.Combo)) {
-                    combo.Action?.Invoke();
-                }
+        private void SwitchCombination(Keys[] pressed) {
+            var combo = settings.ToVimModeCombo;
+            if (combo == null) return;
+
+            Array.Sort(pressed);
+            if (Enumerable.SequenceEqual(pressed, combo?.Combo)) {
+                combo.Action?.Invoke();
             }
         }
 
         public void KeyDown(object? sender, KeyboardPressEventArgs e) {
             pressedKeys.Push((Keys)e.VirtKeyCode);
             var pressed = pressedKeys.ToArray();
-            switchKey(pressedKeys.Peek());
+            SwitchKey(pressedKeys.Peek());
             if (pressed.Length > 1) {
-                switchCombination(pressed);
+                SwitchCombination(pressed);
                 pressedKeys.Clear();
             }
         }

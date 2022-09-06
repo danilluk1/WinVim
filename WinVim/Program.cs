@@ -1,11 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using WinVim.BL;
-using WinVim.BL.common.events;
-using WinVim.BL.common.types;
-using WinVim.BL.windows;
+using WinVim.BL.Common.Types;
 using WinVim.BL.Windows;
-using WinWin.BL.Windows;
 
 public class Program {
     
@@ -16,12 +12,7 @@ public class Program {
     [DllImport("user32.dll")]
     private static extern bool GetCursorPos([In] ref WinVim.BL.Windows.NativeFeatures.POINT point);
 
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern uint SendInput(uint nInputs, NativeFeatures.INPUT[] pInputs, int cbSize);
-    
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetMessageExtraInfo();
-
+    private static Settings settings = Settings.GetInstance();
     private static void Mh_MouseRightClick() {
         Console.WriteLine("Left Click");
         Mouse.MouseRightClick();
@@ -31,46 +22,19 @@ public class Program {
         Console.WriteLine("Left Click");
         Mouse.MouseLeftClick();
     }
-    private static void Mh_MouseRight() {
-        Console.WriteLine("Right");
-        GetCursorPos(ref point);
-        SetCursorPos(point.X + 5, point.Y);
-        Console.WriteLine(point.X + " " + point.Y);
-        Console.WriteLine("Left");
-    }
-
-    private static void Mh_MouseLeft() {
-        Console.WriteLine("Left");
-        GetCursorPos(ref point);
-        SetCursorPos(point.X - 5, point.Y);
-        Console.WriteLine(point.X + " " + point.Y);
-        Console.WriteLine("Left");
-    }
-
-    private static void Mh_MouseUp() {
-        GetCursorPos(ref point);
-        SetCursorPos(point.X, point.Y - 5);
-        Console.WriteLine(point.X + " " + point.Y);
-        Console.WriteLine("Up");
-    }
-
-    private static void Mh_MouseDown() {
-        GetCursorPos(ref point);
-        SetCursorPos(point.X, point.Y + 5);
-        Console.WriteLine(point.X + " " + point.Y);
-        Console.WriteLine("Down");
-    }
-
-    private static void Mh_VimModeDisabled() {
-        NativeFeatures.BlockInput(false);
-        GetCursorPos(ref point);
-        Console.WriteLine("Disabled");
-    }
 
     private static void Mh_VimModeEnabled() {
-        NativeFeatures.BlockInput(true);
-        GetCursorPos(ref point);
-        Console.WriteLine("Enabled");
+        var settings = Settings.GetInstance();
+
+        if (!settings.IsInVim) {
+            Console.WriteLine("Enabled");
+            settings.IsInVim = true;
+            NativeFeatures.BlockInput(true);
+        } else {
+            Console.WriteLine("Disabled");
+            settings.IsInVim = false;
+            NativeFeatures.BlockInput(false);
+        }
     }
 
     public static void Main(string[] args) {
@@ -86,29 +50,36 @@ public class Program {
             new Control(Direction.GetDirection(Directions.Bottom), Keys.J),
             new Control(Direction.GetDirection(Directions.BottomLeft), Keys.Empty),
             new Control(Direction.GetDirection(Directions.Left), Keys.H),
+            new Control(Direction.GetDirection(Directions.None), Keys.B)
         };
-        var arr = new Keys[] {Keys.LeftShift, Keys.Tab};
+        //In asc order
+        var arr = new Keys[] {Keys.LeftShift, Keys.LeftControl};
         settings.ToVimModeCombo = new Combination(
             arr,
             Mh_VimModeEnabled
         );
-        MessageBroker mb = new();
-        MessageHandler mh = new();
-        mh.VimModeEnabled += Mh_VimModeEnabled;
-        mh.VimModeDisabled += Mh_VimModeDisabled;
 
-        mh.MouseDown += Mh_MouseDown;
-        mh.MouseUp += Mh_MouseUp;
-        mh.MouseLeft += Mh_MouseLeft;
-        mh.MouseRight += Mh_MouseRight;
+        MessageBroker mb = new();
+        MessageHandler mh = new(settings);
+
+        mh.VimModeEnabled += Mh_VimModeEnabled;
         mh.MouseLeftClick += Mh_MouseLeftClick;
         mh.MouseRightClick += Mh_MouseRightClick;
+        mh.MouseMove += Mh_MouseMove;
 
-        mb.keyDown += mh.KeyDown;
-        mb.keyUp += mh.KeyUp;
+        mb.KeyDown += mh.KeyDown;
+        mb.KeyUp += mh.KeyUp;
 
         while (true) {
             mb.ProcessMessages();
         }
+    }
+
+    private static void Mh_MouseMove(Direction dir) {
+        Console.WriteLine("Left");
+        GetCursorPos(ref point);
+        SetCursorPos(point.X + dir.dX * settings.SpeedX, point.Y - dir.dY * settings.SpeedY);
+        Console.WriteLine(point.X + " " + point.Y);
+        Console.WriteLine(dir);
     }
 }

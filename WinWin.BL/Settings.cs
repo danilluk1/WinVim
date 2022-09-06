@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WinVim.BL.Common.Types;
 
 namespace WinVim.BL {
     public class Settings {
@@ -10,10 +6,11 @@ namespace WinVim.BL {
         public int SpeedX { get; set; }
         public int SpeedY { get; set; }
         public Combination? ToVimModeCombo { get; set; }
-        public List<Control> Controls { get; set; }
-
-        private Settings() { 
-        }
+        public bool IsInVim { get; set; } = false;
+        public List<Control> Controls { get; set; } = new List<Control>();
+        public Keys MouseLeft { get; set; } = Keys.B;
+        public Keys MouseRight { get; set; } = Keys.N;
+        private Settings() { }
 
         public static Settings GetInstance() {
             if (settings == null)

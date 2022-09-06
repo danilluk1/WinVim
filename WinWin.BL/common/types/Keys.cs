@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WinVim.BL.common.types {
+﻿namespace WinVim.BL.Common.Types {
     /// <summary>
     /// Implementation of cross-platform keys
     /// </summary>
