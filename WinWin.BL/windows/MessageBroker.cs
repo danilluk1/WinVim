@@ -9,10 +9,10 @@ namespace WinVim.BL.Windows {
         private IntPtr keyboardHookCallback(int code, IntPtr wParam, IntPtr lParam) {
             if (code < 0) return NativeFeatures.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
             NativeFeatures.PeekMessage(out NativeFeatures.MSG msg, IntPtr.Zero, 0, 0, 1);
+
             if(wParam.ToInt32() == NativeFeatures.WM_KEYDOWN || wParam.ToInt32() == NativeFeatures.WM_SYSKEYDOWN) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
                 KeyDown?.Invoke(kbHook, new KeyboardPressEventArgs(st.vkCode));
-                Console.WriteLine(st.vkCode);
             }
             else if (wParam.ToInt32() == NativeFeatures.WM_KEYUP || wParam.ToInt32() == NativeFeatures.WM_SYSKEYUP) {
                 var st = Marshal.PtrToStructure<NativeFeatures.KeyboardLowLevelHookStruct>(lParam);
@@ -31,8 +31,8 @@ namespace WinVim.BL.Windows {
             NativeFeatures.MSG msg;
    
             while (NativeFeatures.GetMessage(out msg, IntPtr.Zero, 0, 0) != 0) {
-                //NativeFeatures.TranslateMessage(ref msg);
-                //NativeFeatures.DispatchMessage(ref msg);
+                NativeFeatures.TranslateMessage(ref msg);
+                NativeFeatures.DispatchMessage(ref msg);
             }
             return false;
         }

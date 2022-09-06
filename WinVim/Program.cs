@@ -14,7 +14,7 @@ public class Program {
 
     private static Settings settings = Settings.GetInstance();
     private static void Mh_MouseRightClick() {
-        Console.WriteLine("Left Click");
+        Console.WriteLine("Right Click");
         Mouse.MouseRightClick();
     }
 
@@ -50,7 +50,8 @@ public class Program {
             new Control(Direction.GetDirection(Directions.Bottom), Keys.J),
             new Control(Direction.GetDirection(Directions.BottomLeft), Keys.Empty),
             new Control(Direction.GetDirection(Directions.Left), Keys.H),
-            new Control(Direction.GetDirection(Directions.None), Keys.B)
+            new Control(Direction.GetDirection(Directions.None), Keys.B),
+            new Control(Direction.GetDirection(Directions.None), Keys.N)
         };
         //In asc order
         var arr = new Keys[] {Keys.LeftShift, Keys.LeftControl};
