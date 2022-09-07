@@ -5,7 +5,7 @@ namespace WinVim.BL {
         private static Settings? settings;
         public int SpeedX { get; set; }
         public int SpeedY { get; set; }
-        public Combination? ToVimModeCombo { get; set; }
+        public Combination ToVimModeCombo { get; set; }
         public bool IsInVim { get; set; } = false;
         public List<Control> Controls { get; set; } = new List<Control>();
         public Keys MouseLeft { get; set; } = Keys.B;

@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="WinVim.UI.MainWindow"
+        Title="WinVim.UI"
+        Width="150"
+		MaxWidth="150"
+		MaxHeight="5"
+		Height="5"
+        Name="WinVim"
+        Topmost="True"
+        ShowInTaskbar="True"
+		CanResize="False"
+        SizeToContent="WidthAndHeight"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+>
+    <Grid ShowGridLines="True">
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+	    </Grid.ColumnDefinitions>
+		<Panel Grid.Column="0">
+			<Image Source="../Assets/Icons/vim.png" Stretch="Fill"/>
+		</Panel>
+		<Button Grid.Column="1" Background="Transparent" Foreground="Transparent" Click="OnSettingsClick" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+			<Image Source="../Assets/Icons/settings.png" Stretch="Fill"/>
+		</Button>
+	</Grid>
+</Window>
