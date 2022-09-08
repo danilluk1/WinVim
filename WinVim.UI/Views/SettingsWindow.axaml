@@ -4,6 +4,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="WinVim.UI.Views.SettingsWindow"
-        Title="SettingsWindow">
-  Welcome to Avalonia!
+		ShowInTaskbar="False"
+		Topmost="True"
+		CanResize="False"
+		SizeToContent="WidthAndHeight"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Title="SettingsWindow"
+		Opacity="0.1"
+		Deactivated="OnFocusLost"
+		
+	>
+	<Grid>
+	    <Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Panel Margin="5"  Grid.Row="0" Grid.Column="0">
+			<TextBlock Text="Cursor speed X"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="0" Grid.Column="1" >
+			<NumericUpDown />
+		</Panel>
+		<Panel Margin="5"  Grid.Row="1" Grid.Column="0">
+			<TextBlock Text="Cursor speed Y"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="1" Grid.Column="1" >
+			<NumericUpDown  />
+		</Panel>
+		<Panel Margin="5"  Grid.Row="2" Grid.Column="0">
+			<TextBlock Text="Mouse left click"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="2" Grid.Column="1" >
+			<NumericUpDown  />
+		</Panel>
+		<Panel Margin="5"  Grid.Row="3" Grid.Column="0">
+			<TextBlock Text="Mouse right click"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="3" Grid.Column="1" >
+			<NumericUpDown  />
+		</Panel>
+	</Grid>
 </Window>

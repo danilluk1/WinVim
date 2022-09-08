@@ -4,17 +4,21 @@
         Title="WinVim.UI"
         Width="150"
 		MaxWidth="150"
-		MaxHeight="5"
-		Height="5"
+		MaxHeight="1"
+		Height="1"
         Name="WinVim"
         Topmost="True"
         ShowInTaskbar="True"
+		SizeToContent="Manual"
 		CanResize="False"
-        SizeToContent="WidthAndHeight"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
+		
 >
+	<Window.Background>
+		<SolidColorBrush Opacity="0.5" Color="White"/>		
+	</Window.Background>
     <Grid ShowGridLines="True">
 		<Grid.RowDefinitions>
 			<RowDefinition/>
@@ -27,7 +31,7 @@
 		<Panel Grid.Column="0">
 			<Image Source="../Assets/Icons/vim.png" Stretch="Fill"/>
 		</Panel>
-		<Button Grid.Column="1" Background="Transparent" Foreground="Transparent" Click="OnSettingsClick" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		<Button Grid.Column="1" Background="Transparent" Foreground="Transparent" PointerEnter="OnSettingsEnter" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 			<Image Source="../Assets/Icons/settings.png" Stretch="Fill"/>
 		</Button>
 	</Grid>
