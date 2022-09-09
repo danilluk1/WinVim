@@ -14,11 +14,9 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-		
+		Background="Transparent"
+		Opacity="0.5"
 >
-	<Window.Background>
-		<SolidColorBrush Opacity="0.5" Color="White"/>		
-	</Window.Background>
     <Grid ShowGridLines="True">
 		<Grid.RowDefinitions>
 			<RowDefinition/>

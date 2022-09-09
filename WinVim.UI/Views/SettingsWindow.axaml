@@ -31,25 +31,25 @@
 			<TextBlock Text="Cursor speed X"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="0" Grid.Column="1" >
-			<NumericUpDown />
+			<NumericUpDown Value="{Binding Path=SpeedX}"/>
 		</Panel>
 		<Panel Margin="5"  Grid.Row="1" Grid.Column="0">
 			<TextBlock Text="Cursor speed Y"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="1" Grid.Column="1" >
-			<NumericUpDown  />
+			<NumericUpDown Value="{Binding Path=SpeedY}"/>
 		</Panel>
 		<Panel Margin="5"  Grid.Row="2" Grid.Column="0">
 			<TextBlock Text="Mouse left click"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="2" Grid.Column="1" >
-			<NumericUpDown  />
+			<TextBox x:Name="LeftClickComboTextBox" Text="{Binding Path=MouseLeft}" KeyDown="MouseLeftClickBox_KeyDown" GotFocus="MouseLeftClickBox_Click"/>
 		</Panel>
 		<Panel Margin="5"  Grid.Row="3" Grid.Column="0">
 			<TextBlock Text="Mouse right click"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="3" Grid.Column="1" >
-			<NumericUpDown  />
+			<TextBox x:Name="RightClickComboTextBox"/>
 		</Panel>
 	</Grid>
 </Window>

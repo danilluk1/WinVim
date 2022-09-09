@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Avalonia.Input;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WinVim.BL;
 using WinVim.BL.Common.Types;
+using WinVim.UI.Models;
 
 namespace WinVim.UI.ViewModels {
     internal class SettingsViewModel : INotifyPropertyChanged {
@@ -27,10 +29,10 @@ namespace WinVim.UI.ViewModels {
             }
         }
 
-        public Keys MouseLeft {
-            get { return this.settings.MouseLeft; }
+        public Key MouseLeft {
+            get { return KeyConverter.KeyFromVirtualKey((int)this.settings.MouseLeft); }
             set {
-                this.settings.MouseLeft = value;
+                this.settings.MouseLeft = KeyConverter.VirtualKeyFromKey(value);
                 OnPropertyChanged("MouseLeft");
             }
         }
