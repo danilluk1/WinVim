@@ -1,17 +1,20 @@
-﻿using Avalonia.Input;
+﻿using ReactiveUI;
+using Avalonia.Input;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WinVim.BL;
 using WinVim.BL.Common.Types;
 using WinVim.UI.Models;
+using System.Reactive;
 
 namespace WinVim.UI.ViewModels {
     internal class SettingsViewModel : INotifyPropertyChanged {
         private Settings settings;
-
         public SettingsViewModel(Settings settings) {
             this.settings = settings;
         }
+
+        public ReactiveCommand<Unit, Key> ChangeMouseLeft { get; }
 
         public int SpeedX {
             get { return this.settings.SpeedX; }
@@ -32,6 +35,7 @@ namespace WinVim.UI.ViewModels {
         public Key MouseLeft {
             get { return KeyConverter.KeyFromVirtualKey((int)this.settings.MouseLeft); }
             set {
+                if (value == Key.Back) return;
                 this.settings.MouseLeft = KeyConverter.VirtualKeyFromKey(value);
                 OnPropertyChanged("MouseLeft");
             }

@@ -19,13 +19,21 @@ namespace WinVim.UI.Views {
         }
 
         public void MouseLeftClickBox_KeyDown(object sender, KeyEventArgs e) {
-
+            LeftClickComboTextBox.Text = e.Key.ToString();
             System.Diagnostics.Debug.WriteLine(KeyConverter.VirtualKeyFromKey(e.Key));
         }
 
-        private string _leftClickComboTextBoxPrevText = "";
         public void MouseLeftClickBox_Click(object sender, GotFocusEventArgs e) {
-            _leftClickComboTextBoxPrevText = LeftClickComboTextBox.Text;
+            Settings.GetInstance().MouseLeft = Keys.B;
+        }
+
+        public void MouseRightClickBox_KeyDown(object sender, KeyEventArgs e) {
+            LeftClickComboTextBox.Text = e.Key.ToString();
+            System.Diagnostics.Debug.WriteLine(KeyConverter.VirtualKeyFromKey(e.Key));
+        }
+
+        public void MouseRightClickBox_Click(object sender, GotFocusEventArgs e) {
+            Settings.GetInstance().MouseLeft = Keys.N;
         }
     }
 }

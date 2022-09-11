@@ -14,7 +14,6 @@
         Title="SettingsWindow"
 		Opacity="0.1"
 		Deactivated="OnFocusLost"
-		
 	>
 	<Grid>
 	    <Grid.RowDefinitions>
@@ -28,7 +27,7 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 		<Panel Margin="5"  Grid.Row="0" Grid.Column="0">
-			<TextBlock Text="Cursor speed X"/>
+			<TextBlock Text="Cursor speed X" />
 		</Panel>
 		<Panel Margin="5" Grid.Row="0" Grid.Column="1" >
 			<NumericUpDown Value="{Binding Path=SpeedX}"/>
@@ -43,13 +42,17 @@
 			<TextBlock Text="Mouse left click"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="2" Grid.Column="1" >
-			<TextBox x:Name="LeftClickComboTextBox" Text="{Binding Path=MouseLeft}" KeyDown="MouseLeftClickBox_KeyDown" GotFocus="MouseLeftClickBox_Click"/>
+			<TextBox x:Name="LeftClickComboTextBox" MaxLength="1" Text="{Binding Mode=TwoWay, Path=MouseLeft}" 
+					 KeyDown="MouseLeftClickBox_KeyDown" GotFocus="MouseLeftClickBox_Click">
+			</TextBox>
 		</Panel>
 		<Panel Margin="5"  Grid.Row="3" Grid.Column="0">
 			<TextBlock Text="Mouse right click"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="3" Grid.Column="1" >
-			<TextBox x:Name="RightClickComboTextBox"/>
+			<TextBox x:Name="RightClickComboTextBox" MaxLength="1" Text="{Binding Mode=TwoWay, Path=MouseLeft}" 
+					 KeyDown="MouseRightClickBox_KeyDown" GotFocus="MouseRightClickBox_Click">
+			</TextBox>
 		</Panel>
 	</Grid>
 </Window>
