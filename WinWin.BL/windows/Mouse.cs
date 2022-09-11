@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static WinVim.BL.Windows.NativeFeatures;
 
 namespace WinVim.BL.Windows {
     public static class Mouse {
@@ -28,6 +29,21 @@ namespace WinVim.BL.Windows {
             }
         };
             NativeFeatures.SendInput(2, inputs, Marshal.SizeOf(typeof(NativeFeatures.INPUT)));
+        }
+
+        public static void SetCursorPosition(int x, int y) {
+            NativeFeatures.SetCursorPos(x, y);
+        }
+
+        public static void MoveCursor(int dx, int dy) {
+            POINT currentPoint = GetCursorPosition();
+            SetCursorPos(currentPoint.X + dx, currentPoint.Y - dy);
+        }
+
+        public static POINT GetCursorPosition() {
+            POINT point = new POINT();
+            GetCursorPos(ref point);
+            return point;
         }
 
         public static void MouseRightClick() {

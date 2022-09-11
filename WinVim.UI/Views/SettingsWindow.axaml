@@ -21,6 +21,16 @@
 			<RowDefinition/>
 			<RowDefinition/>
 			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition/>
@@ -50,9 +60,75 @@
 			<TextBlock Text="Mouse right click"/>
 		</Panel>
 		<Panel Margin="5" Grid.Row="3" Grid.Column="1" >
-			<TextBox x:Name="RightClickComboTextBox" MaxLength="1" Text="{Binding Mode=TwoWay, Path=MouseLeft}" 
+			<TextBox x:Name="RightClickComboTextBox" MaxLength="1" Text="{Binding Mode=TwoWay, Path=MouseRight}" 
 					 KeyDown="MouseRightClickBox_KeyDown" GotFocus="MouseRightClickBox_Click">
 			</TextBox>
+		</Panel>
+		<Panel Margin="5" Grid.Row="4" Grid.Column="0">
+			<TextBlock Text="Directions:"/>
+		</Panel>
+		
+		<Panel Margin="5" Grid.Row="5" Grid.Column="0">
+			<TextBlock Text="Left"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="5" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+		
+		<Panel Margin="5" Grid.Row="6" Grid.Column="0" >
+			<TextBlock Text="Top"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="6" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="7" Grid.Column="0" >
+			<TextBlock Text="Right"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="7" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="8" Grid.Column="0" >
+			<TextBlock Text="Down"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="8" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="9" Grid.Column="0" >
+			<TextBlock Text="TopLeft"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="9" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="10" Grid.Column="0" >
+			<TextBlock Text="TopRight"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="10" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="11" Grid.Column="0" >
+			<TextBlock Text="BottomRight"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="11" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="12" Grid.Column="0" >
+			<TextBlock Text="BottomLeft"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="12" Grid.Column="1" >
+			<TextBox />
+		</Panel>
+
+		<Panel Margin="5" Grid.Row="13" Grid.Column="0" >
+			<TextBlock Text="Enable Vim"/>
+		</Panel>
+		<Panel Margin="5" Grid.Row="13" Grid.Column="1" >
+			<TextBox x:Name="EnableVimTextBox" KeyDown="EnableVimBox_KeyDown" IsReadOnly="True" KeyUp="EnableVimBox_KeyUp" GotFocus="EnableVimBox_Click"/>
 		</Panel>
 	</Grid>
 </Window>

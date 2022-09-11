@@ -28,34 +28,20 @@ namespace WinVim.UI
         public MainWindow()
         {
             InitializeComponent();
-            settings.Controls = new List<WinVim.BL.Control> {
-                new WinVim.BL.Control(Direction.GetDirection(Directions.TopLeft), Keys.Empty),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.Top), Keys.K),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.TopRight), Keys.Empty),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.Right), Keys.L),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.BottomRight), Keys.Empty),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.Bottom), Keys.J),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.BottomLeft), Keys.Empty),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.Left), Keys.H),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.None), Keys.B),
-                new WinVim.BL.Control(Direction.GetDirection(Directions.None), Keys.N)
-            };
-
-            var arr = new Keys[] { Keys.LeftShift, Keys.LeftControl };
+            var arr = new List<Keys> { Keys.LeftShift, Keys.LeftControl };
             settings.ToVimModeCombo = new Combination(
                 arr,
                 Mh_VimModeEnabled
             );
             
-            Thread thread = new Thread(Update);
+            Thread thread = new(KeyThread);
             thread.Start();
         }
 
-        private void Update(object? obj) {
+        private void KeyThread(object? obj) {
             var mh = new MessageHandler(Settings.GetInstance());
             var mb = new MessageBroker();
 
-            mh.VimModeEnabled += Mh_VimModeEnabled;
             mh.MouseLeftClick += Mh_MouseLeftClick;
             mh.MouseRightClick += Mh_MouseRightClick;
             mh.MouseMove += Mh_MouseMove;
@@ -68,28 +54,22 @@ namespace WinVim.UI
         }
 
         private void Mh_MouseMove(Direction dir) {
-            Console.WriteLine("Left");
-            GetCursorPos(ref point);
-            SetCursorPos(point.X + dir.dX * settings.SpeedX, point.Y - dir.dY * settings.SpeedY);
-            Console.WriteLine(point.X + " " + point.Y);
-            Console.WriteLine(dir);
+            Mouse.MoveCursor(dir.dX * settings.SpeedX, dir.dY * settings.SpeedY);
         }
 
         private void Mh_MouseRightClick() {
-            throw new NotImplementedException();
+            Mouse.MouseRightClick();
         }
 
         private void Mh_MouseLeftClick() {
-            throw new NotImplementedException();
+            Mouse.MouseLeftClick();
         }
 
         private void Mh_VimModeEnabled() {
             if (!settings.IsInVim) {
-                Console.WriteLine("Enabled");
                 settings.IsInVim = true;
                 NativeFeatures.BlockInput(true);
             } else {
-                Console.WriteLine("Disabled");
                 settings.IsInVim = false;
                 NativeFeatures.BlockInput(false);
             }

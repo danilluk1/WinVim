@@ -7,8 +7,6 @@ namespace WinVim.BL {
         private readonly Settings settings;
         private readonly Stack<Keys> pressedKeys = new();
 
-        public event Action? VimModeEnabled;
-        public event Action? VimModeDisabled;
         public event Action? MouseLeftClick;
         public event Action? MouseRightClick;
         public event Action<Direction>? MouseMove;

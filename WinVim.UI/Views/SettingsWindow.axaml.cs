@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Win32.Interop;
 using System;
+using System.Collections.Generic;
 using WinVim.BL;
 using WinVim.BL.Common.Types;
 using WinVim.UI.Models;
@@ -33,7 +34,28 @@ namespace WinVim.UI.Views {
         }
 
         public void MouseRightClickBox_Click(object sender, GotFocusEventArgs e) {
-            Settings.GetInstance().MouseLeft = Keys.N;
+            Settings.GetInstance().MouseRight = Keys.N;
+        }
+
+        private List<Key> currentCombo = new();
+        public void EnableVimBox_KeyUp(object sender, KeyEventArgs e) {
+            Settings.GetInstance().ToVimModeCombo.Combo.Clear();
+            foreach (Key key in currentCombo) {
+                Settings.GetInstance().ToVimModeCombo.Combo.Add(KeyConverter.VirtualKeyFromKey(key));
+                EnableVimTextBox.Text += key.ToString() + " ";
+            }
+            EnableVimTextBox.Text = EnableVimTextBox.Text.Trim();
+            currentCombo.Clear();
+            Settings.GetInstance().ToVimModeCombo.Combo.Sort();
+        }
+        public void EnableVimBox_KeyDown(object sender, KeyEventArgs e) {
+            EnableVimTextBox.Text = "";
+            currentCombo.Add(e.Key);
+        }
+
+        public void EnableVimBox_Click(object sender, GotFocusEventArgs e) {
+            EnableVimTextBox.Text = "";
+            currentCombo.Clear();
         }
     }
 }
